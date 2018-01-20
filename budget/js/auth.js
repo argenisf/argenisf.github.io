@@ -1,4 +1,7 @@
-// ----- Setting up shop  ------
+/* ****************************************
+----- Setting up shop -----
+**************************************** */
+
 var GlobalAuth = {
 	initialized: false,
 	authenticated: false,
@@ -8,14 +11,12 @@ var GlobalAuth = {
 
 var baseServer = 'http://viruta.com.ve/budget/api.php?';
 
-// ----- Setting up shop  ------
+/* ****************************************
+----- Ajax calls to get info -----
+**************************************** */
 
 function initAuth(){
 	if(!GlobalAuth.initialized){
-
-		GlobalAuth.initialized = true;
-
-		console.log('Contacting server: getting challenge');
 		//get challenge from the server
 		$.ajax(baseServer,{
 			method: 'GET',
@@ -29,13 +30,16 @@ function initAuth(){
 
 function authChallengeReceived(res){
 	if(res.success){
+		GlobalAuth.initialized = true;
 		GlobalAuth.authChallenge = res.challenge;
+		authFormInit();
 	}
 }//end of authChallengeReceived function
 
-function getMPKeys(thePassword){
-	if(!GlobalAuth.authenticated){
-		console.log('Contacting server: getting keys');
+function authGetMPKeys(){
+	if(GlobalAuth.initialized && !GlobalAuth.authenticated){
+		var thePassword = $('#thePassword').val();
+
 		//get keys from the server
 		$.ajax(baseServer,{
 			method: 'GET',
@@ -53,8 +57,64 @@ function getMPKeys(thePassword){
 function authKeysReceived(res){
 	if(res.success){
 		GlobalAuth.authKeys = res;
+		GlobalAuth.authenticated = true;
+		authFormProcessed(true);
+		runAnalytics();
+	}else{
+		processingForm = false;
+		authFormProcessed(false);
 	}
 }//end of authKeysReceived function
 
-// ----- All ready, initiate  ------
+/* ****************************************
+----- DOM Manipulation -----
+**************************************** */
+
+var authDiv = $('#AuthDiv'),
+	authForm = $('#AuthForm'),
+	contentDiv = $('#Contenido'),
+	processingForm = false;
+
+authForm.submit(function(e){
+	e.preventDefault();
+	if(!processingForm && GlobalAuth.initialized){
+		processingForm = true;
+		authFormProcessing();
+		authGetMPKeys();
+	}
+});
+
+function authFormInit(){
+	authFormButtonShow();
+}
+function authFormProcessing(){
+	authFormButtonHide();
+	authFormAlertHide();
+}
+function authFormProcessed(success){
+	if(success){
+		authDiv.addClass('hidden');
+		contentDiv.removeClass('hidden');
+	}else{
+		authFormButtonShow();
+		authFormAlertShow();
+	}
+}
+
+function authFormButtonShow(){
+	authDiv.find('button').removeClass('hidden');
+}
+function authFormButtonHide(){
+	authDiv.find('button').addClass('hidden');	
+}
+function authFormAlertShow(){
+	authDiv.find('.alert').removeClass('hidden');
+}
+function authFormAlertHide(){
+	authDiv.find('.alert').addClass('hidden');	
+}
+
+/* ****************************************
+----- All ready, let's begin -----
+**************************************** */
 initAuth();
