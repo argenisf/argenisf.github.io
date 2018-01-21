@@ -1,3 +1,13 @@
+.table-standard{}
+
+.table-standard .col1{
+	width: 30%;
+}
+
+.table-standard .col2{
+	width: 70%;
+}
+
 @media only screen and (max-width: 980px) {
     .customMobilePadding {
         padding: 10px 20px;

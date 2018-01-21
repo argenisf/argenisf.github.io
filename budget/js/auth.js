@@ -9,6 +9,8 @@ var GlobalAuth = {
 	authChallenge: ''
 };
 
+var autoInit = false;
+
 var baseServer = 'http://viruta.com.ve/budget/api.php?';
 
 /* ****************************************
@@ -16,7 +18,7 @@ var baseServer = 'http://viruta.com.ve/budget/api.php?';
 **************************************** */
 
 function initAuth(){
-	if(!GlobalAuth.initialized){
+	if(autoInit && !GlobalAuth.initialized){
 		//get challenge from the server
 		$.ajax(baseServer,{
 			method: 'GET',
