@@ -12,4 +12,12 @@
     .customMobilePadding {
         padding: 10px 20px;
     }
+
+    .table-standard .col1{
+		width: 50%;
+	}
+
+	.table-standard .col2{
+		width: 50%;
+	}
 }
