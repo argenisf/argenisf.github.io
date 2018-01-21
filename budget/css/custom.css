@@ -18,8 +18,13 @@
 }
 
 @media only screen and (max-width: 980px) {
+
     .customMobilePadding {
         padding: 10px 20px;
+    }
+
+    .table-standard{
+    	font-size: 1.25em;
     }
 
     .table-standard .col1{
