@@ -9,7 +9,7 @@ var GlobalAuth = {
 	authChallenge: ''
 };
 
-var autoInit = false;
+var autoInit = true;
 
 var baseServer = 'http://viruta.com.ve/budget/api.php?';
 
