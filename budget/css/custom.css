@@ -8,6 +8,15 @@
 	width: 70%;
 }
 
+.table-detalles-interno{
+	list-style: none;
+	padding: 0; margin: 0;
+	color: #333;
+}
+.table-detalles-interno span{
+	font-weight: bold;
+}
+
 @media only screen and (max-width: 980px) {
     .customMobilePadding {
         padding: 10px 20px;
