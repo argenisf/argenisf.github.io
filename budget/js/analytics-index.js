@@ -1,5 +1,6 @@
 var eventGraph;
 var theTable = $('table.table-standard');
+var tableTransacciones = $('#tableTransacciones');
 
 function runAnalytics(){
 	MP.api.setCredentials(GlobalAuth.authKeys.api_key, GlobalAuth.authKeys.api_secret);
@@ -47,6 +48,7 @@ function fillTable(data){
 			curRow = curRow.replace('RemplazarGasto',curObj.gasto);
 			curRow = curRow.replace('RemplazarGasto',curObj.gasto);
 			curRow = curRow.replace('RemplazarRemanente',curObj.remanente);
+			curRow = curRow.replace('RemplazarSubCat',curObj.sub_cat);
 
 			newRows+= curRow;
 		}
@@ -70,6 +72,15 @@ function addTableBehavior(categorias){
 			theUL.removeClass('hidden');
 		}else{
 			theUL.addClass('hidden');
+		}
+	});
+
+	var aTransacciones = theTable.find('a.ver-transacciones');
+
+	aTransacciones.click(function(e){
+		var thisAnchor = $(this);
+		if(thisAnchor.data('subcat')){
+			buscarTransacciones(thisAnchor.data('subcat'));
 		}
 	});
 
@@ -136,4 +147,51 @@ function doJQLQuery(){
 	).done(function(results) {
 	    fillTable(results);
 	});
+}
+
+function buscarTransacciones(nombre){
+	MP.api.jql(
+	    function main() {
+		  var today = new Date().toISOString().substr(0,10),
+		    firstDayOfTheMonth = (today.substr(0,7)+'-01');
+		    
+		  return Events({
+		    from_date: firstDayOfTheMonth,
+		    to_date:   today,
+		    event_selectors:[{event: 'Transaccion', selector: 'properties["tipo"] == "Gasto" and properties["sub_categoria"] == "'+params.sub_cat+'"'}]
+		  })
+		  .sortDesc('time')
+		  .map(function(e){
+		    var laFecha = new Date(e.time).toISOString().substr(5,5).split('-');
+		    return {
+		      fecha: ((laFecha.length > 1)?laFecha[1]+'/'+laFecha[0]:laFecha),
+		      desc: e.properties.descripcion,
+		      monto: e.properties.monto.toFixed(2)
+		    };
+		  });
+		},{sub_cat: nombre}
+	).done(function(results) {
+	    loadTransacciones(nombre,results);
+	});
+}
+
+
+
+function loadTransacciones(nombre, items){
+	var tbody = tableTransacciones.find('tbody');
+	tbody.html('');
+	//remplazar titulo
+	tableTransacciones.parent().find('h3 span').html(nombre);
+
+	var theText = '';
+	for(var i=0; i < items.length; i++){
+
+		theText+= '<tr>';
+		theText+= '<td>'+items[i].fecha+'</td>';
+		theText+= '<td>'+items[i].desc+'</td>';
+		theText+= '<td style="text-align: right;">€'+items[i].monto+'</td>';
+		theText+= '</tr>';
+
+	}
+	tbody.html(theText);
 }
