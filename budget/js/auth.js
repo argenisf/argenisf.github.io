@@ -11,7 +11,7 @@ var GlobalAuth = {
 
 var autoInit = true;
 
-var baseServer = 'http://viruta.com.ve/budget/api.php?';
+var baseServer = '../api.php?';
 
 /* ****************************************
 ----- Ajax calls to get info -----
@@ -33,8 +33,12 @@ function initAuth(){
 function authChallengeReceived(res){
 	if(res.success){
 		GlobalAuth.initialized = true;
-		GlobalAuth.authChallenge = res.challenge;
-		authFormInit();
+		if(res.action === 'credentials'){
+			authKeysReceived(res);
+		}else{
+			GlobalAuth.authChallenge = res.challenge;
+			authFormInit();
+		}
 	}
 }//end of authChallengeReceived function
 
