@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Budget Admin Site</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+        <link rel="stylesheet" href="css/amsify.select.css">
+        <style>
+        table.table tbody td.number,table.table .right{
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        table.table tbody td.highlight{
+            font-size: 1.2em;
+        }
+        table.table tbody td.positive{
+            color: #18c818;
+        }
+        table.table tbody td.negative{
+            color: #eb450d;
+        }
+
+        table tbody tr {
+            text-transform: capitalize;
+        }
+
+        abbr{
+            cursor: pointer !important;
+            text-decoration: none !important;
+        }
+        tr.deleted-row td{
+            text-decoration: line-through;
+            background-color: lightpink;
+        }
+
+        
+        </style>
+        </head>
+    <body>
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li role="presentation"><a href="index.html">Inicio</a></li>
+                <li role="presentation"  class="active"><a href="#">Transacciones</a></li>
+                <li role="presentation"><a href="budget.html">Presupuesto</a></li>
+                <li role="presentation"><a href="closing.html">Cierres</a></li>
+                <li role="presentation"><a href="funds.html">Fondos</a></li>
+              </ul>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Transacciones</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <form id="mainForm" class="form-horizontal" >
+                        
+                        <div class="form-group">
+                            <label for="inputDate" class="col-sm-3 control-label">Fecha</label>
+                            <div class="col-sm-3">
+                                <input type="date" class="form-control" id="inputDate" placeholder="Fecha">
+                            </div>
+                            <label for="inputRef" class="col-sm-2 control-label">Referencia</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="inputRef" placeholder="Referencia" readonly value="">
+                            </div>
+                        </div> 
+                        
+                        <div class="form-group">
+                            <label for="inputCategory" class="col-sm-2 control-label">Categoría</label>
+                            <div class="col-sm-4">
+                                <select id="inputCategory" class="form-control" searchable></select>
+                            </div>
+                            <label for="inputAmount" class="col-sm-2 control-label">Monto</label>
+                            <div class="col-sm-3">
+                                <input type="number" class="form-control" id="inputAmount" placeholder="Monto">
+                            </div>
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="inputDescription" class="col-sm-2 control-label">Descripción</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="inputDescription" placeholder="Descripción">
+                            </div>
+                        </div> 
+
+                    </form>
+                    <div class="row">
+                        <div class="col-md-4">&nbsp</div>
+                        <div class="col-md-4">
+                            <button type="button" class="btn btn-warning" id="btnReset">Limpiar</button>
+                            <button type="button" class="btn btn-success" id="btnSave">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+                <div  class="col-md-4">
+                    Suggestions
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button style="margin-top: 20px;" id="btnUpdateGCP" class="btn btn-primary">Actualizar en GCP</button>
+
+                    <button style="margin-top: 20px; margin-left: 20px;" id="btnChangeToEdit" class="btn btn-primary">Cambiar a modo edición</button>
+
+                    <button style="margin-top: 20px; margin-left: 20px;" id="btnShowHideUpdated" class="btn btn-info">Mostrar/Ocultar actualizados</button>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 50px;">
+                <div class="col-md-12">
+
+                    <table class="table" id="transactionTable">
+                        <thead>
+                            <th>&nbsp;</th>
+                            <th>Fecha</th>
+                            <th>Referencia</th>
+                            <th>Categoría</th>
+                            <th>Descripción</th>
+                            <th class="right">Monto</th>
+                            <th class="right">Ignorar</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <div id="resultsLogging" class="well" style="margin-top: 40px;">
+                        1 transacción actualizada hace 2 minutos.        
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <!-- monthID selector -->
+                    <div id="monthIdSelector" style="padding-top: 10px;">
+                        <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4>Month ID: <span><i>current</i></span></h4>
+                        </div>
+                        <div class="panel-body">
+                            <form>
+                            <input type="text" class="form-control" id="inputMonthIdSelector" placeholder="YYYYMM" />
+                            
+                            <div style="padding-top: 10px; text-align: right;">
+                                <button type="button" class="btn btn-success" id="btnChangeMonthId">Cambiar</button>
+                            </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                    <!-- monthID selector -->
+                </div>
+            </div>
+
+            <div id="catModal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Suggestions</p>
+                        <table id="categorySuggestions" class="table table-stripped">
+                            <thead>
+                                <th>Ref</th>
+                                <th>Cat</th>
+                                <th>Monto</th>
+                                <th>Descripción</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnCloseModal" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+
+        </div><!-- end of container-->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="js/helper.js"></script>
+    <script src="js/jquery.amsifyselect.js"></script>
+    <script src="js/suggestions.js"></script>
+    <script src="js/transactions.js"></script>
+  </body>
+</html>
