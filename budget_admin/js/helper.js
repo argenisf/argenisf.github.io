@@ -1,4 +1,4 @@
-const ENV = 'dev';
+const ENV = 'prod';
 var SERVER_HOST = 'http://localhost:8080';
 if(ENV == 'prod') SERVER_HOST = 'https://budgetapp.theargis.com';
 
