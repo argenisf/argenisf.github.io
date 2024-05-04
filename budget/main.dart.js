@@ -44828,7 +44828,7 @@ $0(){this.a.tA(this.b)},
 $S:0}
 A.A1.prototype={
 ajF(a){return A.ty(a,new A.aa8(),null)},
-F(a){var s=null,r=$.aFJ(),q=r?"assets/web_animation.lottie":"assets/main_animation.lottie"
+F(a){var s=null,r=$.aFJ(),q=r?"assets/web_animation.json":"assets/main_animation.lottie"
 return A.dV(new A.zI(new A.Is(q,s,s,s,this.gajE(),!1),s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s),s,s)}}
 A.aa8.prototype={
 $1(a){var s={}
