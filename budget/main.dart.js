@@ -44820,8 +44820,10 @@ A.ai7.prototype={
 $0(){this.a.tA(this.b)},
 $S:0}
 A.MB.prototype={
-F(a){var s=null,r=$.aFH(),q=r?"assets/web_animation.json":"assets/main_animation.json"
-return A.dV(new A.zH(new A.Iq(q,s,s,s,s,!1),s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s),s,s)}}
+F(a){var s,r,q=null,p="assets/main_animation.json"
+try{s=$.aFH()
+if(s)p="assets/web_animation.json"}catch(r){}s=p
+return A.dV(new A.zH(new A.Iq(s,q,q,q,q,!1),q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q),q,q)}}
 A.zE.prototype={
 a7(){return new A.U6(B.i)}}
 A.U6.prototype={
