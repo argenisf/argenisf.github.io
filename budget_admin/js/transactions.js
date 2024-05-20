@@ -283,7 +283,7 @@ var hide_updated_ones = true;
     });
 
     function validate_record(){
-        const time = (validateDateString(inputDate.val()))?get_time_in_seconds(new Date(inputDate.val()+"T00:00:00")):false;
+        const time = (validateDateString(inputDate.val()))?get_time_in_seconds(new Date(inputDate.val()+"T02:00:00.000Z")):false;
         const category = (validateString(categories_select.val()))?categories_select.val():false;
         const amount = convertToNumber(inputAmount.val());
         const description = (validateString(inputDescription.val()))?inputDescription.val():false;
